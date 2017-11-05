@@ -12,7 +12,7 @@ function love.load()
 	roomList = {}
 	curRoom = nil
 
-	goToRoom('startup')
+	goToRoom('startgame')
 end
 
 function love.update(dt)
