@@ -1,4 +1,5 @@
 require 'libraries/class'
+require 'libraries/utils'
 Object = require 'libraries/classic'
 Timer = require 'libraries/enhancedtimer'
 sodapop = require 'libraries/sodapop'
@@ -8,17 +9,20 @@ function love.load()
 	recursiveEnum('objects', object_files)
 	rqFiles(object_files)
 
-	timer = Timer()
+	roomList = {}
+	curRoom = nil
+
+	goToRoom('startup')
 end
 
 function love.update(dt)
-	timer:update(dt)
+	if curRoom then curRoom:update(dt) end
 end
 
 function love.draw()
-	
+	if curRoom then curRoom:draw() end
 end
 
-function love.keypressed(key)
-	
+function goToRoom(room_type, ...)
+	curRoom = _G[room_type](...)
 end
