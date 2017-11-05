@@ -4,10 +4,10 @@ function startgame:new()
 	self.area = Area()
 	self.timer = Timer()
 	
-	player = {}
+	player0 = {}
 
-	player.sprite = sodapop.newAnimatedSprite(0, 0)
-	player.sprite:addAnimation('walk', {
+	player0.sprite = sodapop.newAnimatedSprite(0,0)
+	player0.sprite:addAnimation('walk', {
 		image = love.graphics.newImage 'resources/bb_walk_sheet.png',
 		frameWidth = 32,
 		frameHeight = 32,
@@ -16,7 +16,7 @@ function startgame:new()
 		},
 	})
 
-	self.area:addGameObject('PlayerObject', 384, 324, player)
+	self.area:addGameObject('Entity', 20, 20, {player = true, sprite = player0.sprite})
 end
 
 function startgame:update(dt)
