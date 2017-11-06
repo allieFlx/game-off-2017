@@ -3,7 +3,8 @@ startgame = Object:extend()
 function startgame:new()
 	self.area = Area()
 	self.timer = Timer()
-	
+	timer = self.timer
+
 	newSprite = {}
 	newSprite = sodapop.newAnimatedSprite(0,0)
 	newSprite:addAnimation('idle', {
@@ -29,6 +30,10 @@ function startgame:new()
 	})
 
 	curDir = 0
+	t = {}
+	t.x = 0
+	t.mode = 'manual'
+	logString = 'Nothing to report'
 end
 
 function startgame:update(dt)
@@ -54,6 +59,40 @@ function startgame:update(dt)
 	end
 end
 
+function torch(key)
+	if key == 'left' then
+		t.mode = 'tween'
+		timer:tween(.3, t, {x= player1.x - 200}, 
+			'in-out-cubic', function() t.mode = 'manual' end )
+	end
+	if key == 'right' then
+		t.mode = 'tween'
+		timer:tween(.3, t, {x= player1.x + 200}, 
+			'in-out-cubic', function() t.mode = 'manual' end)
+	end
+	if key == 'none' then
+		t.mode = 'tween'
+		timer:tween(.3, t, {x = player1.x},
+			'in-out-cubic', function () t.mode = 'manual' end)
+	end
+end
+
+function love.keypressed(key)
+	torch(key)	
+end
+
+function love.keyreleased(key)
+	if not love.keyboard.isDown('left') and not love.keyboard.isDown('right')	
+	then
+		torch('none')
+	end
+end
+
 function startgame:draw()
+	dx = 0
+	if t.mode == 'manual' then dx = player1.x + (curDir * 200)
+	else dx = t.x end
+	love.graphics.circle('line',dx,player1.y,200)
 	self.area:draw()
+	love.graphics.print(logString, 300, 20)
 end
