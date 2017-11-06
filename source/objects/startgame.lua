@@ -77,11 +77,11 @@ function torch(key)
 	end
 end
 
-function love.keypressed(key)
+function startgame:keypressed(key)
 	torch(key)	
 end
 
-function love.keyreleased(key)
+function startgame:keyreleased(key)
 	if not love.keyboard.isDown('left') and not love.keyboard.isDown('right')	
 	then
 		torch('none')

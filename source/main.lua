@@ -12,7 +12,7 @@ function love.load()
 	roomList = {}
 	curRoom = nil
 
-	goToRoom('startgame')
+	goToRoom('startup')
 end
 
 function love.update(dt)
@@ -21,6 +21,14 @@ end
 
 function love.draw()
 	if curRoom then curRoom:draw() end
+end
+
+function love.keypressed(key) 
+	if curRoom then curRoom:keypressed(key) end
+end
+
+function love.keyreleased(key)
+	if curRoom then curRoom:keyreleased(key) end
 end
 
 function goToRoom(room_type, ...)
