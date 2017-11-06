@@ -34,6 +34,7 @@ function startgame:new()
 	t.x = 0
 	t.mode = 'manual'
 	logString = 'Nothing to report'
+	walk = false
 end
 
 function startgame:update(dt)
@@ -41,13 +42,15 @@ function startgame:update(dt)
 	self.timer:update(dt)
 
 	if love.keyboard.isDown('left') then
-		if curDir ~= -1 then player1.sprite:switch 'walk' end
+		if not walk then player1.sprite:switch 'walk' end
+		walk = true
 		player1.sprite.flipX = true
 		player1.x = player1.x - 1
 		curDir = -1
 	end
 	if love.keyboard.isDown('right') then
-		if curDir ~= 1 then player1.sprite:switch 'walk' end
+		if not walk then player1.sprite:switch 'walk' end
+		walk = true
 		player1.sprite.flipX = false
 		player1.x = player1.x + 1
 		curDir = 1
@@ -55,25 +58,20 @@ function startgame:update(dt)
 	if not love.keyboard.isDown('left') and not love.keyboard.isDown('right')
 	then
 		player1.sprite:switch 'idle'
-		curDir = 0
+		walk = false
 	end
 end
 
 function torch(key)
-	if key == 'left' then
+	if key == 'left' and not player1.sprite.flipX then
 		t.mode = 'tween'
 		timer:tween(.3, t, {x= player1.x - 200}, 
 			'in-out-cubic', function() t.mode = 'manual' end )
 	end
-	if key == 'right' then
+	if key == 'right' and player1.sprite.flipX then
 		t.mode = 'tween'
 		timer:tween(.3, t, {x= player1.x + 200}, 
 			'in-out-cubic', function() t.mode = 'manual' end)
-	end
-	if key == 'none' then
-		t.mode = 'tween'
-		timer:tween(.3, t, {x = player1.x},
-			'in-out-cubic', function () t.mode = 'manual' end)
 	end
 end
 
@@ -82,10 +80,6 @@ function startgame:keypressed(key)
 end
 
 function startgame:keyreleased(key)
-	if not love.keyboard.isDown('left') and not love.keyboard.isDown('right')	
-	then
-		torch('none')
-	end
 end
 
 function startgame:draw()
